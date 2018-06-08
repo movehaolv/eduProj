@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'jss/plugins/queryCity/css/cityLayout.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/lq.datetimepick.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+    <script src="{% static 'jss/jquery.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'jss/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
+
+</head>
+<body>
+<section class="headerwrap headerwrap2">
+    <header>
+        <div class="header2 header">
+            <div class="top">
+                <div class="wp">
+                    <div class="fl"><p>服务电话：<b>33333333</b></p></div>
+                    <!--登录后跳转-->
+
+                    {% if request.user.is_authenticated %}
+                        <div class="personal">
+                            <dl class="user fr">
+                                <dd>{{ request.user }}<img class="down fr" src="/static/images/top_down.png"/></dd>
+                                <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/>
+                                </dt>
+                            </dl>
+                            <div class="userdetail">
+                                <dl>
+                                    <dt><img width="80" height="80"
+                                             src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                                    <dd>
+                                        <h2>django</h2>
+                                        <p>{{ request.user }}</p>
+                                    </dd>
+                                </dl>
+                                <div class="btn">
+                                    <a class="personcenter fl" href="{% url 'user:center' %}">进入个人中心</a>
+                                    <a class="fr" href="{% url 'logout' %}">退出</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a style="color:white" class="fr registerbtn" href="/register/">注册</a>
+                        <a style="color:white" class="fr loginbtn" href="/login/">登录</a>
+                    {% endif %}
+                    <a href="{% url 'user:msg' %}">
+                        <div class="msg-num"><span id="MsgNum">{{ request.user.get_user_msgs }}</span></div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="middle">
+                <div class="wp">
+                    <a href="index.html"><img class="fl" src="{% static 'images/logo2.png' %}"/></a>
+                    <h1>我的慕学网</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+</section>
+
+
+<!--crumbs start-->
+
+<section>
+    <div class="wp">
+        <ul class="crumbs">
+            <li><a href="{% url 'index' %}">首页</a>></li>
+            {% block bread %}{% endblock %}
+        </ul>
+    </div>
+</section>
+
+<section>
+    <div class="wp list personal_list">
+        <div class="left">
+            <ul>
+            <ul>
+                <li {% if request.path|slice:"6:" == "center/" %} class="active2" {% endif %} ><a href="{% url 'user:center' %}">个人信息</a></li>
+                <li {% if request.path|slice:"6:" == "course/" %} class="active2" {% endif %}  ><a href="{% url 'user:course' %}">我的课程</a></li>
+                <li {% if "fav" in request.path|slice:"6:" %} class="active2" {% endif %}  ><a href="{% url 'user:fav_course' %}">我的收藏</a></li>
+                <li {% if request.path|slice:"6:" == "msg/" %} class="active2" {% endif %}  >
+                    <a href="{% url 'user:msg' %}" style="position: relative;">
+                        我的消息
+                    </a>
+                </li>
+            </ul>
+        </div>
+        {% block right %} {% endblock %}
+    </div>
+</section>
+
+
+<!--sidebar start-->
+{% block add %}{% endblock %}
+
+<section>
+    <ul class="sidebar">
+        <li class="qq">
+            <a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2023525077&site=qq&menu=yes"></a>
+        </li>
+        <li class="totop"></li>
+    </ul>
+</section>
+
+
+<script src="{% static 'jss/selectUi.js' %}" type='text/javascript'></script>
+<script src="{% static 'jss/deco-common.js' %}" type='text/javascript'></script>
+<script type="text/javascript" src="{% static 'jss/plugins/laydate/laydate.js' %}"></script>
+<script src="{% static 'jss/plugins/layer/layer.js' %}"></script>
+<script src="{% static 'jss/plugins/queryCity/js/public.js' %}" type="text/javascript"></script>
+<script src="{% static 'jss/unslider.js' %}" type="text/javascript"></script>
+<script src="{% static 'jss/plugins/jquery.scrollLoading.js' %}" type="text/javascript"></script>
+<script src="{% static 'jss/deco-common.js' %}" type='text/javascript'></script>
+<script src="{% static 'jss/validateDialog.js' %}" type="text/javascript"></script>
+<script src='{% static 'jss/plugins/jquery.upload.js' %}' type='text/javascript'></script>
+<script src="{% static 'jss/validate.js' %}" type="text/javascript"></script>
+<script src="{% static 'jss/deco-user.js' %}"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

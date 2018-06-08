@@ -1,0 +1,100 @@
+{% extends 'usercenter/userbase.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    我的收藏
+{% endblock %}
+
+{% block bread %}
+    <li>我的收藏</li>
+{% endblock %}
+
+{% block right %}
+    <div class="right">
+        <div class="personal_des Releasecont">
+            <div class="head">
+                <h1>我的消息</h1>
+            </div>
+
+        </div>
+        <div class="personal_des permessage">
+            <div class="head">
+                <ul class="tab_header messagehead">
+                    <li class="active"><a href="{% url 'user:msg' %}">个人消息</a></li>
+                </ul>
+
+            </div>
+            <div class="messagelist">
+                {% for obj in msgs.object_list  %}
+                <div class="messages" >
+                    <div class="fr" >
+                        <div class="read_status" msg_id="{{ obj.id }}" style="float:right;{% if not obj.has_read %}color:red{% endif %}">{% if obj.has_read %}已读{% else %}未读{% endif %}</div>
+                        <div class="top"><span class="fl time">{{ obj.add_time }}</span><span
+                                class="fr btn foldbtn"></span></div>
+                        <p>{{ obj.message }}</p>
+                    </div>
+
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+            <ul class="pagination">
+                {% if msgs.has_previous %}
+                    <li><a href="?{{ msgs.previous_page_number.querystring }}">«</a></li>
+                {% else %}
+                    <li><a> «</a></li>
+                {% endif %}
+                {% for page in msgs.pages %}
+                    {% if page %}
+                        {% ifequal page msgs.number %}
+                            <li class="active"><a>{{ page }}</a></li>
+                        {% else %}
+                            <li ><a href="?{{ page.querystring }}">{{ page }}</a></li>
+                        {% endifequal %}
+                    {% else %}
+                        <li ><a>...</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if msgs.has_next %}
+                    <li><a href="?{{ msgs.next_page_number.querystring }}"> »</a></li>
+                {% else %}
+                    <li><a> »</a></li>
+                {% endif %}
+            </ul>
+
+
+
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script>
+    $(".messages").on("click",function () {
+        $.ajaxSetup({
+            beforeSend:function(xhr,settings){
+            xhr.setRequestHeader('X-CSRFtoken',"{{ csrf_token }}");
+            }
+        });
+        var read_status = $(this).find('div[class="read_status"]').html();
+        var msg_id = $(this).find('[class="read_status"]').attr("msg_id");
+        $.ajax({
+            cache:false,
+            type: "POST",
+            data:{"read_status":read_status,"msg_id":msg_id},
+            url:"{% url 'user:msg' %}",
+            success:function (data) {
+                ret = JSON.parse(data);
+                if(ret['data'] == "已读"){
+                    window.location.reload();
+                }
+            }
+        });
+
+
+    })
+    </script>
+
+{% endblock %}

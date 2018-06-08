@@ -1,0 +1,90 @@
+{% extends 'usercenter/userbase.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    我的收藏
+{% endblock %}
+
+{% block bread %}
+    <li>我的收藏</li>
+{% endblock %}
+
+{% block right %}
+    <div class="right">
+        <div class="personal_des Releasecont">
+            <div class="head">
+                <h1>我的收藏</h1>
+            </div>
+        </div>
+        <div class="personal_des permessage">
+            <div class="head">
+                <ul class="tab_header messagehead">
+                    <li{% if request.path|slice:"10:" == "org/" %} class="active" {% endif %} ><a href="{% url 'user:fav_org' %}">课程机构</a></li>
+                    <li{% if request.path|slice:"10:" == "teacher/" %} class="active" {% endif %} ><a href="{% url 'user:fav_teacher' %}">授课教师 </a></li>
+                    <li {% if request.path|slice:"10:" == "course/" %} class="active" {% endif %} ><a href="{% url 'user:fav_course' %}">公开课程</a></li>
+                </ul>
+            </div>
+            <div class="messagelist">
+                {% for obj in fav_teachers %}
+                <div class=" butler_list butler-fav-box">
+                    <dl class="des users">
+                        <dt>
+                            <a href="{% url 'teacher:detail' obj.id %}">
+                                <img width="100" height="100" src="{{ MEDIA_URL }}{{ obj.image }}"/>
+                            </a>
+                        </dt>
+                        <dd>
+                            <h1>
+                                <a href="{% url 'teacher:detail' obj.id %}">
+                                    {{ obj.name }}<span class="key">认证教师</span>
+                                </a>
+                            </h1>
+                            <ul class="cont clearfix">
+                                <li class="time">工作年限：<span>{{ obj.work_years }}年</span></li>
+                            </ul>
+                            <ul class="cont clearfix">
+                                <li class="time">工作公司：<span>{{ obj.work_company }}</span></li>
+                            </ul>
+                            <ul class="cont clearfix">
+                                <li class="time">公司职位：<span>{{ obj.work_position }}</span></li>
+                            </ul>
+                        </dd>
+                        <div class="delete jsDeleteFav_teacher" data-favid="{{ obj.id }}"></div>
+                    </dl>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+
+    $('.jsDeleteFav_teacher').on('click', function(){
+        $.ajaxSetup({
+            beforeSend:function(xhr,settings){
+            xhr.setRequestHeader('X-CSRFtoken',"{{ csrf_token }}");
+            }
+        });
+        var fav_id = $(this).attr('data-favid');
+        var fav_type = 3;
+        $.ajax({
+            type:"POST",
+            url:"{% url 'teacher:add_fav' %}",
+            data:{'fav_id':fav_id,'fav_type':fav_type},
+            success:function(data){
+                ret = JSON.parse(data);
+                if(ret['data']=="收藏"){
+                    window.location.reload();
+                }
+                else if(ret['data']=="已收藏"){
+                    console.log("has faved");
+                }
+            }
+
+        })
+    });
+
+</script>
+{% endblock %}

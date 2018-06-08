@@ -1,0 +1,67 @@
+{% extends 'org_base.html' %}
+{% load staticfiles %}
+{% block title %}机构首页{% endblock %}
+{% block bread %}机构首页{% endblock %}
+{% block content %}
+    <div class="right companycenter layout grouping">
+        <div class="head">
+            <h1>全部课程</h1>
+            <a class="green fr more" href="{% url 'org:course' org_id=course_org.id %}">查看更多 > </a>
+        </div>
+        <div class="brief group_list">
+            {% for obj in courses %}
+                <div class="module1_5 box">
+                    <a href="{% url 'course:detail' obj.id %}"><img width="214px" src="{{ MEDIA_URL }}{{ obj.image }}"/></a>
+                    <div class="des">
+                        <a href="{% url 'course:detail' obj.id %}"><h2>{{ obj.name }}</h2></a>
+                        <span class="fl">课时：<i class="key">0</i></span>
+                        <span class="fr">参加人数：{{ obj.students }}</span>
+                    </div>
+                    <div class="bottom">
+                        <span class="fl">{{ course_org.name }}</span>
+                        <span class="star fr  notlogin
+                    " data-favid="13" data-fav-type="4">
+                    {{ obj.fav_nums }}
+                </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="right companycenter layout">
+        <div class="head">
+            <h1>机构教师</h1>
+            <a class="green fr more" href="{% url 'org:teacher' org_id=course_org.id %}">查看更多 > </a>
+        </div>
+        {% for obj in teachers %}
+        <div class="diarys">
+            <div class="module5 share company-diary-box" style="padding:10px 0;">
+                <div class="left">
+                    <img class="pic" src="{{ MEDIA_URL }}{{ obj.image }}"/>
+                </div>
+                <div class="right">
+                    <div class="top">
+                        <div class="fl">
+                            <a href=""><h1>{{ obj.name }}</h1></a>
+                            <span>工作年限：{{ obj.work_years }}</span>
+                            <span>课程数：3</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="right companycenter layout">
+        <div class="head">
+            <h1>机构介绍</h1>
+            <a class="green fr more" href="{% url 'org:desc' org_id=course_org.id %}">查看更多 > </a>
+        </div>
+        <div class="cont">&nbsp; &nbsp; <p>&nbsp; &nbsp;</p>
+            {{ course_org.desc }}
+        </div>
+    </div>
+{% endblock %}
+

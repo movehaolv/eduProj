@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block custome_bread %}
+    <section>
+        <div class="wp">
+            <ul class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li>课程讲师</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <section>
+	<div class="wp butler_list_box list">
+	<div class='left'>
+		<div class="butler_list layout">
+			<div class="head">
+				<ul class="fl tab_header">
+					<li {% if sort == None or sort == "" %} class="active" {% endif %} ><a href="?keywords={{ keywords }}&sort=">全部</a> </li>
+					<li {% ifequal sort "hot" %} class="active" {% endifequal %} ><a href="{% url 'teacher:list' %}?keywords={{ keywords }}&sort=hot">人气 &#8595;</a></li>
+				</ul>
+                <div class="fr butler-num">共<span class="key">{{ all_teachers.count }}</span>人&nbsp;&nbsp;&nbsp;</div>
+			</div>
+                {% for obj in teachers.object_list %}
+                <dl class="des">
+					<dt>
+						<a href="{% url 'teacher:detail' obj.id %}">
+                            <div class="picpic">
+                                <img width="100" height="100" class="scrollLoading" src="{{ MEDIA_URL }}{{ obj.image }}"/>
+                            </div>
+                        </a>
+
+					</dt>
+					<dd>
+						<a href="teacher-detail.html">
+                            <h1>{{ obj.name }}<span class="key picbig">金牌讲师</span></h1>
+                        </a>
+						<ul class="cont">
+							<li>工作年限：<span>{{ obj.work_years }}</span></li>
+							<li>工作职位：<span>{{ obj.work_position }}</span></li>
+							<li>就职公司：<span>{{ obj.work_company }}&nbsp;</span></li>
+							<li>教学特点：<span>{{ obj.points }}</span></li>
+							<li>人气(点击数)：<span>{{ obj.click_nums }}</span></li>
+							<li>收藏人数：<span>{{ obj.fav_nums }}</span></li>
+						</ul>
+					</dd>
+                    <a class="buy buyservice" href="{% url 'teacher:detail' obj.id %}"><br/>查看<br/>详情</a>
+                </dl>
+            {% endfor %}
+		</div>
+<ul class="pagination">
+    {% if teachers.has_previous %}
+        <li><a href="?{{ teachers.previous_page_number.querystring }}">«</a></li>
+    {% else %}
+        <li><a> «</a></li>
+    {% endif %}
+    {% for page in teachers.pages %}
+        {% if page %}
+            {% ifequal page teachers.number %}
+                <li class="active"><a>{{ page }}</a></li>
+            {% else %}
+                <li ><a href="?{{ page.querystring }}">{{ page }}</a></li>
+            {% endifequal %}
+        {% else %}
+            <li ><a>...</a></li>
+        {% endif %}
+    {% endfor %}
+
+    {% if teachers.has_next %}
+        <li><a href="?{{ teachers.next_page_number.querystring }}"> »</a></li>
+    {% else %}
+        <li><a> »</a></li>
+    {% endif %}
+</ul>
+
+
+	</div>
+	<div class="right layout">
+		<div class="head">讲师排行榜</div>
+            {% for obj in recommend_teachers %}
+            <dl class="des">
+                <span class="num fl">{{ forloop.counter }}</span>
+                <a href="{% url 'teacher:detail' obj.id %}">
+                    <dt>
+                        <img width="50" height="50" class="scrollLoading"  src="{{ MEDIA_URL }}{{ obj.image }}"/>
+                    </dt>
+                </a>
+                <dd>
+                    <a href="{% url 'teacher:detail' obj.id %}">
+                        <h1 title="bobby">{{ obj.name }}</h1>
+                    </a>
+                    <p>工作年限：<span>{{ obj.work_years }}年</span></p>
+                </dd>
+            </dl>
+
+        {% endfor %}
+	</div>
+    </div>
+</section>
+
+{% endblock %}

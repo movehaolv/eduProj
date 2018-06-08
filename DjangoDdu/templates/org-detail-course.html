@@ -1,0 +1,42 @@
+{% extends 'org_base.html' %}
+{% block title %}机构课程{% endblock %}
+{% block bread %}机构课程{% endblock %}
+{% block content %}
+    <section>
+
+        <div class="right companycenter layout">
+            <div class="head">
+                <h1>机构课程</h1>
+            </div>
+            <div class="brief group_list">
+                {% for obj in courses %}
+                    <div class="module1_5 box">
+                        <a href="{% url 'course:detail' obj.id %}"><img width="214px" src="{{ MEDIA_URL }}{{ obj.image }}"/></a>
+                        <div class="des">
+                            <a href="{% url 'course:detail' obj.id %}"><h2>{{ obj.name }}</h2></a>
+                            <span class="fl">课时：<i class="key">0</i></span>
+                            <span class="fr">参加人数：{{ obj.students }}</span>
+                        </div>
+                        <div class="bottom">
+                            <span class="fl">{{ course_org.name }}</span>
+                            <span class="star fr  notlogin
+                    " data-favid="13" data-fav-type="4">
+                    {{ obj.fav_nums }}
+                </span>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+            <div class="pageturn">
+                <ul class="pagelist">
+                    <li class="active"><a href="?page=1">1</a></li>
+                </ul>
+            </div>
+        </div>
+
+
+    </section>
+{% endblock %}
+
+

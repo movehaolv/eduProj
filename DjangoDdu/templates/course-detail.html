@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}课程详情{% endblock %}
+
+{% block custome_bread %}
+    <section>
+        <div class="wp">
+            <ul class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'course:list' %}">公开课</a>></li>
+                <li>课程详情</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <section>
+        <div class="wp">
+            <div class="groupPurchase_detail detail">
+                <div class="toppro">
+                    <div class="left">
+                        <div class="picbox">
+                            <div class="tb-booth tb-pic">
+                                <img width="440" height="445" src="{{ MEDIA_URL }}{{ course.image }}"  />
+                            </div>
+
+                        </div>
+                        <div class="des">
+                            <h1 title="django 从入门到精通体验开始了">{{ course.name }}</h1>
+                            <span class="key">{{ course.desc }}</span>
+                            <div class="prize">
+                                <span class="fl">难度：<i class="key">{{ course.get_degree_display }}</i></span>
+                                <span class="fr">学习人数:{{ study_nums }}</span>
+                            </div>
+                            <ul class="parameter">
+                                <li><span class="pram word3">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长：</span><span>{{ course.learn_time }}min</span></li>
+                                <li><span class="pram word3">章&nbsp;节&nbsp;数：</span><span>{{ course.get_lesson.count }}</span></li>
+                                <li><span class="pram word3">课程类别：</span><span title="">{{ course.category }}</span></li>
+                                <li class="piclist"><span class="pram word4">学习用户：</span>
+                                    {% for obj in learn_stds %}
+                                    <span class="pic"><img width="40" height="40" src="{{ MEDIA_URL }}{{ obj.user.image }}"/></span>
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                            <div class="btns">
+                                <div class="btn colectgroupbtn" id="jsLeftBtn">
+                                    {% if fav_course_status  %}已收藏{% else %}收藏{% endif %}
+                                </div>
+                                <a style="color: white" href="{% url 'course:info' course.id %}"><div class="buy btn">开始学习</div></a>
+                            </div>
+                        </div>
+                        <div class="group-share-box">
+                            <div class="bdsharebuttonbox"
+                                 data-text="django开始了"
+                                 data-desc="我在#慕课网#发现了"
+                                 data-comment=""
+                                 data-url="/group/groupdetail/15/">
+                                <span class="fl">分享到：</span>
+                                <a href="#" class="bds_more" data-cmd="more"></a>
+                                <a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone"></a>
+                                <a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina"></a>
+                                <a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq"></a>
+                                <a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren"></a>
+                                <a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <div class="head">
+                            <h1>授课机构</h1>
+                            <p>世界名校，课程权威</p>
+                        </div>
+                        <div class="pic">
+                            <a href="{% url 'org:desc' course.course_org.id %}">
+                                <img width="150" height="80" src="{{ MEDIA_URL }}{{ course.course_org.image }}"/>
+                            </a>
+                        </div>
+                        <a href="{% url 'org:desc' course.course_org.id %}">
+                            <h2 class="center" title="清华大学">{{ course.course_org.name }}</h2>
+                        </a>
+                        <div class="btn  notlogin
+					     " data-favid="14" id="jsRightBtn">
+                            {% if fav_org_status  %}已收藏{% else %}收藏{% endif %}
+                        </div>
+                        <div class="clear">
+                            <ul>
+                                <li>
+                                    <span>课 &nbsp;程&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   {{ course.course_org.get_course.count }}</span>
+                                </li>
+                                <li>
+                                    <span>教 &nbsp;师&nbsp; 数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {{ course.course_org.get_teacher.count }}</span>
+                                </li>
+                                <li>所在地区：&nbsp;&nbsp;{{ course.course_org.addr }}</li>
+                                <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:
+                                    &nbsp;&nbsp;
+                                    <img title="金牌机构" , src="{% static 'images/gold.png' %}"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="wp">
+            <div class="list groupPurchase_detail_pro">
+                <div class="left layout">
+                    <div class="head">
+                        <ul class="tab_header">
+                            <li class="active">课程详情</li>
+                        </ul>
+                    </div>
+                    <div class="tab_cont tab_cont1">
+
+                        <p>{{ course.name }}</p>
+                        <table>
+                            <tbody>
+                            <tr class="firstRow">
+                                <td style="word-break: break-all;" width="53" valign="top">课程</td>
+                                <td style="word-break: break-all;" width="53" valign="top">课时<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">难度<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">时长<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">学习人数<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">点击数<br/></td>
+                            </tr>
+                            <tr>
+                                <td style="word-break: break-all;" width="53" valign="top">{{ course.name }}<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top"><br/>{{ video_nums }}</td>
+                                <td style="word-break: break-all;" width="53" valign="top">{{ course.get_degree_display }}<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">{{ course.learn_time }}<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">{{ study_nums }}<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">{{ course.click_nums }}<br/></td>
+                            </tr>
+                            <tr>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                            </tr>
+                            <tr>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                            </tr>
+                            <tr>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                            </tr>
+                            <tr>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                                <td width="53" valign="top"><br/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p><br/></p>
+                        <p><img src="http://img.baidu.com/hi/jx2/j_0025.gif"/></p>
+                        <p><br/></p>
+
+
+                    </div>
+                    <div class="tab_cont tab_cont2">
+                        <div class="comment">
+                            <div class="comenlist">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right layout">
+                    <div class="head" comment="学过该课程的同学还学过的课程">相关课程推荐</div>
+                    <div class="group_recommend">
+                        <dl>
+                            <dt>
+                                <a target="_blank" href="">
+                                    <img width="240" height="220" class="scrollLoading"
+                                         src="{{ MEDIA_URL }}{{ recommend_course.image }}"/>
+                                </a>
+                            </dt>
+                            <dd>
+                                <a target="_blank" href=""><h2> {{ recommend_course.name }}</h2></a>
+                                <span class="fl">学习时长：<i class="key">{{ recommend_course.learn_time }}</i></span>
+                            </dd>
+                        </dl>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+
+function add_fav(cur_ele,fav_id,fav_type){
+    $.ajaxSetup({
+        beforeSend:function(xhr,settings){
+            xhr.setRequestHeader('X-CSRFtoken',"{{ csrf_token }}");
+            }
+        });
+    $.ajax({
+        url:'{% url 'course:add_fav' %}',
+        type:'POST',
+        // data:{'user':123,'pwd':['123',123]},   // data:{'user':123,'pwd':['123',123]}, 如果提交的数据有列表，那么要添加traditional:true,在views中用POST,getList来接收值
+        // traditional:true,
+        data:{'fav_id':fav_id,'fav_type':fav_type},  // 获取form表单的所有value   #add_form 是form的id <form id="add_form">...</form>
+        success:function(data){  // 这个data是上面的data发送给服务端后，服务端返回的值
+            var ret = JSON.parse(data);
+                        if(ret['status'])
+                        {cur_ele.html(ret['data'])}
+                        else{
+                            window.location.href="/login/";
+                        }
+        },
+        error:function(){
+            alert('error')  // 如果后端发生了未知错误(捕获到的错误不是未知错误)，则会执行这里。比如 return HttpResponse(json.dumps(a1qdwq))
+        }
+    })
+}
+
+$("#jsLeftBtn").on('click',function(){
+    add_fav($(this),{{ course.id }},1);
+});
+
+$("#jsRightBtn").on('click',function(){
+    console.log($(this));
+    add_fav($(this),{{ course.course_org_id }},2);
+});
+</script>
+{% endblock %}
+
+

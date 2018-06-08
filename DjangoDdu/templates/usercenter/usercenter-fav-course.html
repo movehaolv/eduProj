@@ -1,0 +1,82 @@
+{% extends 'usercenter/userbase.html' %}
+{% load staticfiles %}
+
+{% block title %}
+    我的收藏
+{% endblock %}
+
+{% block bread %}
+    <li>我的收藏</li>
+{% endblock %}
+
+{% block right %}
+    <div class="right">
+        <div class="personal_des Releasecont">
+            <div class="head">
+                <h1>我的收藏</h1>
+            </div>
+        </div>
+        <div class="personal_des permessage">
+            <div class="head">
+                <ul class="tab_header messagehead">
+                    <li{% if request.path|slice:"10:" == "org/" %} class="active" {% endif %} ><a href="{% url 'user:fav_org' %}">课程机构</a></li>
+                    <li{% if request.path|slice:"10:" == "teacher/" %} class="active" {% endif %} ><a href="{% url 'user:fav_teacher' %}">授课教师 </a></li>
+                    <li {% if request.path|slice:"10:" == "course/" %} class="active" {% endif %} ><a href="{% url 'user:fav_course' %}">公开课程</a></li>
+                </ul>
+
+            </div>
+            <div class="companycenter">
+                <div class="group_list brief">
+                    {% for obj in fav_courses %}
+                    <div class="module1_5 box">
+                        <a href="{% url 'course:detail' obj.id %}">
+                            <img width="214" height="190"
+                                 src="{{ MEDIA_URL }}{{ obj.image }}"/>
+                        </a>
+                        <div class="des">
+                            <a href="course-detail.html"><h2>scrapy教程</h2></a>
+                            <span class="fl">时长：<i class="key">{{ obj.learn_time }}/min</i></span>
+                            <span class="fr">学习人数：{{ obj.students }}</span>
+                        </div>
+                        <div class="bottom">
+                            <span class="fl">{{ obj.course_org.name }}</span>
+                            <span class="delete-group fr jsDeleteFav_course" data-favid="{{ obj.id }}"></span>
+                        </div>
+                    </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+<script>
+    $('.jsDeleteFav_course').on('click', function(){
+        $.ajaxSetup({
+            beforeSend:function(xhr,settings){
+            xhr.setRequestHeader('X-CSRFtoken',"{{ csrf_token }}");
+            }
+        });
+        var fav_id = $(this).attr('data-favid');
+        var fav_type = 1;
+        $.ajax({
+            type:"POST",
+            url:"{% url 'course:add_fav' %}",
+            data:{'fav_id':fav_id,'fav_type':fav_type},
+            success:function(data){
+                ret = JSON.parse(data);
+                if(ret['data']=="收藏"){
+                    window.location.reload();
+                }
+                else if(ret['data']=="已收藏"){
+                    console.log("has faved");
+                }
+            }
+
+        })
+    });
+
+</script>
+{% endblock %}

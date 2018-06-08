@@ -1,0 +1,92 @@
+{% extends 'course_video_base.html' %}
+{% load staticfiles %}
+
+{% block custome_bread %}
+    <section>
+        <div class="wp">
+            <ul class="crumbs">
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'course:list' %}">公开课</a>></li>
+                <li><a href="{% url 'course:detail' course.id %}">课程评论</a>></li>
+                <li>章节信息</li>
+            </ul>
+        </div>
+    </section>
+{% endblock %}
+
+{% block video %}
+    <div id="js-pub-container" class="issques clearfix js-form">
+        <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake">
+            <textarea id="js-pl-textarea" class="" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！"></textarea>
+        </div>
+        <input type="button" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">
+        <p class="global-errortip js-global-error"></p>
+    </div>
+    <div id="course_note">
+    {% for obj in course_comment %}
+        <ul class="mod-post" id="comment-list">
+            <li class="post-row">
+                <div class="media">
+                    <span target="_blank"><img src='{{ MEDIA_URL }}{{ obj.user.image }}' width='40' height='40'/></span>
+                </div>
+                <div class="bd">
+                    <div class="tit">
+                        <span target="_blank">{{ obj.user.username }}</span>
+                    </div>
+                    <p class="cnt">{{ obj.comments }}</p>
+                    <div class="footer clearfix">
+                        <span title="创建时间" class="l timeago">时间：{{ obj.add_time }}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    {% endfor %}
+    </div>
+{% endblock %}
+
+
+{% block custome_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/learn-less.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/course-comment.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muke/course/common-less.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/mooc.css' %}" />
+{% endblock %}
+
+{% block js %}
+<script>
+$("#js-pl-submit").on('click',function () {
+    var comment = $("#js-pl-textarea").val();
+    if(comment === ""){
+        alert("评论不能为空");
+        return ;
+    }
+    $.ajaxSetup({
+    beforeSend:function(xhr,settings){
+        xhr.setRequestHeader('X-CSRFtoken',"{{csrf_token}}");
+        }
+    });
+    $.ajax({
+        url:'{% url 'course:comment' course.id %}',
+        type:"POST",
+        data:{"comment":comment},
+        success:function(data){
+            var ret = JSON.parse(data);
+            if(ret['status']){
+                window.location.reload();
+
+            }
+            else{
+                alert(ret['error']);
+            }
+        },
+        error:function(){
+            alert("未知错误");
+        }
+        }
+    )
+})
+
+</script>
+{% endblock %}
