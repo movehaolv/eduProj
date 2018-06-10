@@ -24,9 +24,9 @@ sys.path.insert(1,os.path.join(BASE_DIR,'extra_app'))
 SECRET_KEY = 'tp!ld@fj@e*v0yeiz8hqa_dtd#i#^pz179(dk-&b=(z=ql@hav'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -156,7 +156,7 @@ EMAIL_FROM = '839985880@qq.com'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+#STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 10,

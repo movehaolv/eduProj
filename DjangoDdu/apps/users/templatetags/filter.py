@@ -11,6 +11,9 @@ register = template.Library()
 
 @register.filter
 def trans(date_time):
-    date_time =date_time.strftime("%Y-%m-%d")
-    lst = re.findall(r"(\d+)", date_time)
+    try:
+        date_time =date_time.strftime("%Y-%m-%d")
+        lst = re.findall(r"(\d+)", date_time)
+    except Exception as e:
+        lst = ["year",'month','day']
     return "%s-%s-%s" % (lst[0], lst[1], lst[2])

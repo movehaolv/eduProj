@@ -22,7 +22,7 @@ from django.conf.urls import url,include
 from django.views.static import serve
 
 from users.views import LoginView,RegisterView,ActiveUserView,ForgetPwdView,ResetView,ModifyPwdView,LogoutView,IndexView
-from DjangoDdu.settings import MEDIA_ROOT,STATIC_ROOT
+from DjangoDdu.settings import MEDIA_ROOT
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -48,7 +48,7 @@ urlpatterns = [
     # 文件上传路径
     url(r'^media/(?P<path>.*)$',serve,{'document_root':MEDIA_ROOT}),
     # http错误页面
-    url(r'^static/(?P<path>.*)$',serve,{'document_root':STATIC_ROOT}),
+    #url(r'^static/(?P<path>.*)$',serve,{'document_root':STATIC_ROOT}),
 
 ]
 
