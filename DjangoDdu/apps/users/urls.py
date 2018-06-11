@@ -19,7 +19,7 @@ urlpatterns = [
     # 替换用户头像
     url(r'upload_img/$',UploadImgView.as_view(),name="upload_img"),
     # 修改密码
-    url(r'modify_pwd/$',CenterModifyPwdView.as_view(),name="modify_pwd"),
+    url(r'modify_pwd1/$',CenterModifyPwdView.as_view(),name="modify_pwd1"),
     # 发送邮箱验证码
     url(r'sendemail_code/$',SendEmailCodeView.as_view(),name="sendemail_code"),
     # 重置邮箱

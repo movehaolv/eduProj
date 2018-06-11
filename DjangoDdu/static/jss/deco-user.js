@@ -82,11 +82,12 @@ $(function(){
     });
 
     $('#jsResetPwdBtn').click(function(){
+        console.log(3331);
         $.ajax({
             cache: false,
             type: "POST",
             dataType:'json',
-            url:"/user/modify_pwd/",
+            url:"/user/modify_pwd1/",
             data:$('#jsResetPwdForm').serialize(),
             async: true,
             success: function(data) {

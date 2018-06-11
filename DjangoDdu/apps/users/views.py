@@ -131,6 +131,7 @@ class ResetView(View):
 
 class ModifyPwdView(View):
     def post(self, request):
+        print(2)
         modify_pwd_form = ModifyPwdForm(request.POST)
         email = request.POST.get('email')
         if modify_pwd_form.is_valid():
@@ -226,6 +227,8 @@ class UploadImgView(View):
 
 class CenterModifyPwdView(View):
     """js用的提供的"""
+    def get(self,request):
+        return HttpResponse('ok')
     def post(self, request):
         print(1)
         ret = {'status':"success",'error':None,'msg':None}
